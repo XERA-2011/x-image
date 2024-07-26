@@ -1,0 +1,50 @@
+{
+    "name": "x-image",
+    "version": "1.0.0",
+    "description": "Download image extension",
+    "manifest_version": 3,
+    "author": "x",
+    "icons": {
+        "16": "icons/icon_16.png",
+        "48": "icons/icon_48.png",
+        "128": "icons/icon_128.png"
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/icon_16.png",
+            "48": "icons/icon_48.png",
+            "128": "icons/icon_128.png"
+        },
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "js": ["js/content_scripts.js"],
+            "matches": [
+                "https://*.1688.com/*",
+                "https://*.alibaba.com/*",
+                "https://*.taobao.com/*",
+                "https://*.tmall.com/*",
+                "https://detail.tmall.com/*",
+                "https://*.tmall.hk/*",
+                "http://www.xiaohongshu.com/*",
+                "https://www.xiaohongshu.com/*",
+                "https://*.instagram.com/*"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["js/gm_api.js"],
+            "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*", "https://*.instagram.com/*"]
+        },
+        {
+            "resources": ["js/xiaohongshu.js"],
+            "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*"]
+        },
+        {
+            "resources": ["js/instagram.js"],
+            "matches": ["https://*.instagram.com/*"]
+        }
+    ]
+}

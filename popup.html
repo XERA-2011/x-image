@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>x-image</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                user-select: none;
+            }
+            html {
+                background-color: #eee;
+            }
+            body {
+                min-width: 300px;
+                font-size: 16px;
+            }
+
+            .item {
+                height: 30px;
+                line-height: 30px;
+                padding: 0 5px;
+                background-color: #fff;
+                cursor: pointer;
+            }
+            .item:hover {
+                background-color: #eee;
+            }
+            progress {
+                width: 100%;
+                appearance: none;
+            }
+
+            progress::-webkit-progress-value {
+                background-color: green;
+            }
+            progress::-moz-progress-bar {
+                background-color: green;
+            }
+            progress::-ms-fill {
+                background-color: green;
+            }
+            #imgList {
+                display: flex;
+                max-height: 320px;
+                flex-wrap: wrap;
+                overflow: auto;
+            }
+            #imgList div {
+                width: 50%;
+                text-align: center;
+                padding: 6px;
+                background-color: #fff;
+                position: relative;
+                cursor: pointer;
+            }
+            #imgList div:nth-child(2n) {
+                margin-right: 0;
+            }
+            #imgList div img {
+                /* width: 100%; */
+                width: 120px;
+                height: 120px;
+                object-fit: contain;
+            }
+            #imgList div.activation {
+                border: 1px solid green;
+                box-sizing: border-box;
+            }
+            #imgList div.activation:before {
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                border: 12px solid green;
+                border-top-color: transparent;
+                border-left-color: transparent;
+            }
+            #imgList div.activation:after {
+                content: '';
+                width: 5px;
+                height: 10px;
+                position: absolute;
+                right: 4px;
+                bottom: 5px;
+                border: 1px solid #fff;
+                border-top-color: transparent;
+                border-left-color: transparent;
+                transform: rotate(45deg);
+            }
+
+            #tips {
+                text-align: center;
+                color: #ccc;
+                cursor: auto;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="imgList"></div>
+            <div class="list">
+                <div class="item" id="getImg">获取数据</div>
+                <div class="item" id="allSelect">全选图片/取消</div>
+                <div class="item" id="download">打包下载</div>
+                <div class="item">
+                    <label id="videoSelect">
+                        <input type="checkbox" value="视频" name="videoSelect" />
+                        视频
+                    </label>
+                </div>
+                <div class="item" style="cursor: progress">
+                    <progress id="progress" max="100" value="0"></progress>
+                </div>
+                <div class="item" id="tips">先获取数据</div>
+            </div>
+        </div>
+    </body>
+    <script src="js/zipjs.js"></script>
+    <script src="js/FileSaver.js"></script>
+    <script src="js/popup.js"></script>
+</html>
