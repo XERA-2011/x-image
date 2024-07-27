@@ -1,15 +1,15 @@
 // 这里本打算 弄非指定网页 则置灰的，但tab.url总是不稳定获取
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete') {
-        updateIcon(tab);
-    }
-});
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+//     if (changeInfo.status === 'complete') {
+//         updateIcon(tab);
+//     }
+// });
 
-chrome.tabs.onActivated.addListener(activeInfo => {
-    chrome.tabs.get(activeInfo.tabId, tab => {
-        updateIcon(tab);
-    });
-});
+// chrome.tabs.onActivated.addListener(activeInfo => {
+//     chrome.tabs.get(activeInfo.tabId, tab => {
+//         updateIcon(tab);
+//     });
+// });
 
 function updateIcon(tab) {
     const url = tab.url;

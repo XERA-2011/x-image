@@ -77,7 +77,7 @@ downloadBtn.onclick = function () {
             tips.innerHTML = '未选择图片';
             return;
         }
-        tips.innerHTML = '开始打包下载';
+        tips.innerHTML = '正在打包中...';
         var zip = new JSZip();
         try {
             saveToZip(zip, imgUrls, 0)
@@ -90,20 +90,13 @@ downloadBtn.onclick = function () {
     }
 };
 // 全选
-document.getElementById('allSelect').onclick = function () {
-    var items = Array.from(document.getElementById('main').getElementsByTagName('div'));
-    var flag = items.filter(item => item.classList.contains('activation'));
+let allSelect = document.getElementById('allSelect')
+allSelect.onclick = function () {
+    let items = Array.from(document.getElementById('imgList').getElementsByTagName('div'));
+    let flag = items.filter(item => item.classList.contains('activation'));
     if (items.length === 0) {
         tips.innerHTML = '尚未获取图片';
         return;
-    }
-
-    if (flag.length === 0) {
-        tips.innerHTML = `当前选中 ${imgList.length}/${imgList.length}`;
-    } else if (flag.length < items.length) {
-        tips.innerHTML = '再次点击取消全选';
-    } else {
-        tips.innerHTML = `当前选中 ${imgList.length}/${imgList.length}`;
     }
     for (let i = 0; i < items.length; i++) {
         if (flag.length < items.length) {
@@ -111,6 +104,13 @@ document.getElementById('allSelect').onclick = function () {
         } else {
             items[i].classList.remove('activation');
         }
+    }
+    flag = items.filter(item => item.classList.contains('activation'));
+    tips.innerHTML = `当前选中 ${flag.length}/${imgList.length}`;
+    if (flag.length === 0) {
+        allSelect.innerHTML = '全选图片';
+    } else {
+        allSelect.innerHTML = '取消全选图片';
     }
 };
 function getResources(index, url, callback) {
