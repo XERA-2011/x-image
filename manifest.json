@@ -23,7 +23,7 @@
     "permissions": ["storage", "activeTab", "scripting"],
     "content_scripts": [
         {
-            "js": ["js/content_scripts.js"],
+            "js": ["content_scripts.js"],
             "matches": [
                 "https://*.1688.com/*",
                 "https://*.alibaba.com/*",
@@ -39,15 +39,15 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["js/gm_api.js"],
+            "resources": ["inject/gm_api.js"],
             "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*", "https://*.instagram.com/*"]
         },
         {
-            "resources": ["js/xiaohongshu.js"],
+            "resources": ["inject/xiaohongshu.js"],
             "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*"]
         },
         {
-            "resources": ["js/instagram.js"],
+            "resources": ["inject/instagram.js"],
             "matches": ["https://*.instagram.com/*"]
         }
     ]

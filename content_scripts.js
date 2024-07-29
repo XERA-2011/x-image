@@ -8,13 +8,13 @@ const injectScript = (file, node) => {
     s.setAttribute('src', file);
     th.appendChild(s);
 };
-injectScript(chrome.runtime.getURL('js/gm_api.js'), 'body');
+injectScript(chrome.runtime.getURL('inject/gm_api.js'), 'body');
 
 if (_url.indexOf("xiaohongshu.com") > -1) {
-    injectScript(chrome.runtime.getURL('js/xiaohongshu.js'), 'body');
+    injectScript(chrome.runtime.getURL('inject/xiaohongshu.js'), 'body');
 }
 if (_url.indexOf("instagram.com") > -1) {
-    injectScript(chrome.runtime.getURL('js/instagram.js'), 'body');
+    injectScript(chrome.runtime.getURL('inject/instagram.js'), 'body');
 }
 
 
@@ -104,7 +104,7 @@ let platform_alibaba = function (_url, result) {
 };
 let platform_taobao = async function (_url, result) {
     // 商品名称
-    result.name = _url;
+    result.name = document.querySelector('h1').textContent || _url;
     if (document.querySelector(".tb-main-title")) {
         result.name = document.querySelector(".tb-main-title").innerText;
     } else if (document.querySelector(".ItemHeader--mainTitle--3CIjqW5")) {
@@ -114,7 +114,6 @@ let platform_taobao = async function (_url, result) {
     } else if (document.querySelector("[class^=\"ItemTitle--mainTitle--\"]")) {
         result.name = document.querySelector("[class^=\"ItemTitle--mainTitle--\"]").innerText;
     }
-
 
     // 日期信息
     let container = document.querySelector("[class^=\"BaseDropsInfo--tableWrapper--\"]");

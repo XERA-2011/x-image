@@ -7,7 +7,7 @@ let zipName = "文件";
 let imgList = [];
 let percent = 0;
 getImgBtn.onclick = function (e) {
-    doGao('获取资源', (response) => {
+    getData('获取资源', (response) => {
         console.log('资源内容', response);
         if (response && (response.zhu.length > 0 || response.xiang.length > 0)) {
             getImgBtn.innerHTML = '已获取数据 √';
@@ -179,7 +179,7 @@ function saveToZip(zip, imgUrls, index) {
     })
 }
 
-function doGao(message, callback) {
+function getData(message, callback) {
     getCurrentTabId((tabId) => {
         chrome.tabs.sendMessage(tabId, message, function (response) {
             if (callback) callback(response);
