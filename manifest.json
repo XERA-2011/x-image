@@ -6,13 +6,11 @@
     "author": "x",
     "icons": {
         "16": "icons/icon_16.png",
-        "48": "icons/icon_48.png",
         "128": "icons/icon_128.png"
     },
     "action": {
         "default_icon": {
             "16": "icons/icon_16.png",
-            "48": "icons/icon_48.png",
             "128": "icons/icon_128.png"
         },
         "default_popup": "popup.html"
@@ -23,7 +21,7 @@
     "permissions": ["storage", "activeTab", "scripting"],
     "content_scripts": [
         {
-            "js": ["content_scripts.js"],
+            "js": ["content.js"],
             "matches": [
                 "https://*.1688.com/*",
                 "https://*.alibaba.com/*",
@@ -39,15 +37,15 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["inject/gm_api.js"],
+            "resources": ["script/gm_api.js"],
             "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*", "https://*.instagram.com/*"]
         },
         {
-            "resources": ["inject/xiaohongshu.js"],
+            "resources": ["script/xiaohongshu.js"],
             "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*"]
         },
         {
-            "resources": ["inject/instagram.js"],
+            "resources": ["utils/jquery-3.7.1.min.js", "script/instagram.js"],
             "matches": ["https://*.instagram.com/*"]
         }
     ]

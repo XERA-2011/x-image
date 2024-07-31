@@ -33,7 +33,6 @@ function updateIcon(tab) {
         chrome.action.setIcon({
             path: {
                 "16": "icons/icon_16.png",
-                "48": "icons/icon_48.png",
                 "128": "icons/icon_128.png"
             },
             tabId: tab.id
@@ -43,7 +42,6 @@ function updateIcon(tab) {
         chrome.action.setIcon({
             path: {
                 "16": "icons/icon_gray_16.png",
-                "48": "icons/icon_gray_48.png",
                 "128": "icons/icon_gray_128.png"
             },
             tabId: tab.id

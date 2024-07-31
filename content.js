@@ -2,19 +2,46 @@ console.log("x-image 加载成功!!!")
 const _url = window.location.href;
 // 注入脚本
 const injectScript = (file, node) => {
-    const th = document.querySelector(node);
-    const s = document.createElement('script');
-    s.setAttribute('type', 'text/javascript');
-    s.setAttribute('src', file);
-    th.appendChild(s);
+    return new Promise((resolve, reject) => {
+        const th = document.querySelector(node);
+        const s = document.createElement('script');
+        s.setAttribute('type', 'text/javascript');
+        s.setAttribute('src', file);
+        s.onload = resolve; // 当脚本加载完成后解析 Promise
+        s.onerror = reject; // 当脚本加载失败时拒绝 Promise
+        th.appendChild(s);
+    });
 };
-injectScript(chrome.runtime.getURL('inject/gm_api.js'), 'body');
+// 注入css
+const injectCSS = (file, node) => {
+    const th = document.querySelector(node);
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', file);
+    th.appendChild(link);
+};
 
 if (_url.indexOf("xiaohongshu.com") > -1) {
-    injectScript(chrome.runtime.getURL('inject/xiaohongshu.js'), 'body');
+    Promise.all([
+        injectScript(chrome.runtime.getURL('script/gm_api.js'), 'body'),
+    ]).then(() => {
+        // 在所有 脚本加载完成后注入 instagram.js
+        return injectScript(chrome.runtime.getURL('script/xiaohongshu.js'), 'body');
+    }).catch(error => {
+        console.error('脚本加载失败:', error);
+    });
 }
 if (_url.indexOf("instagram.com") > -1) {
-    injectScript(chrome.runtime.getURL('inject/instagram.js'), 'body');
+    Promise.all([
+        injectScript(chrome.runtime.getURL('script/gm_api.js'), 'body'),
+        injectScript(chrome.runtime.getURL('utils/jquery-3.7.1.min.js'), 'body'),
+    ]).then(() => {
+        // 在所有 脚本加载完成后注入 instagram.js
+        return injectScript(chrome.runtime.getURL('script/instagram.js'), 'body');
+    }).catch(error => {
+        console.error('脚本加载失败:', error);
+    });
 }
 
 

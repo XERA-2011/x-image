@@ -73,6 +73,19 @@ async function GM_fetchResource(resourcePath) {
     }
 }
 
+async function GM_fetchJson(path) {
+    try {
+        const response = await fetch(chrome.runtime.getURL(path))
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching json:', error);
+        return null;
+    }
+}
+
 function GM_openInTab(url) {
     window.open(url, '_blank');
 }
