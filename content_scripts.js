@@ -104,7 +104,7 @@ let platform_alibaba = function (_url, result) {
 };
 let platform_taobao = async function (_url, result) {
     // 商品名称
-    result.name = document.querySelector('h1').textContent || _url;
+    result.name = document.querySelector('h1') ? document.querySelector('h1').getAttribute('title') : _url;
     if (document.querySelector(".tb-main-title")) {
         result.name = document.querySelector(".tb-main-title").innerText;
     } else if (document.querySelector(".ItemHeader--mainTitle--3CIjqW5")) {
