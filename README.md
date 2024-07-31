@@ -5,13 +5,13 @@
 ## 感谢开源作者
 
 - 淘宝天猫详情页 图片下载插件整合修改
-  + `https://gitee.com/cjmf/gao-tu`
+  + [gao-tu](https://gitee.com/cjmf/gao-tu)
 
 - 小红书 篡改猴脚本整合修改
-  + `https://github.com/JoeanAmier/XHS-Downloader`
+  + [XHS-Downloader](https://github.com/JoeanAmier/XHS-Downloader)
 
 - instagram 篡改猴脚本整合
-  + `https://github.com/y252328/Instagram_Download_Button`
+  + [Instagram_Download_Button](https://github.com/y252328/Instagram_Download_Button)
 
 
 ## 插件使用说明
