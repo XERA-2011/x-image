@@ -7,7 +7,7 @@ let imgList = [];
 let percent = 0;
 
 getImgBtn.on('click', function (e) {
-    getData('获取资源', (response) => {
+    getResponse((response) => {
         console.log('资源内容', response);
         if (response && (response.zhu.length > 0 || response.xiang.length > 0)) {
             getImgBtn.html('已获取数据 √');
@@ -182,16 +182,21 @@ function saveToZip(zip, imgUrls, index) {
     })
 }
 
-function getData(message, callback) {
-    getCurrentTabId((tabId) => {
-        chrome.tabs.sendMessage(tabId, message, function (response) {
-            if (callback) callback(response);
-        });
-    });
-}
-
-function getCurrentTabId(callback) {
+/**
+ * 获取当前激活标签页的淘宝响应数据
+ *
+ * 此函数通过chrome扩展API查询当前窗口的激活标签页，并发送消息获取淘宝相关响应数据
+ * 使用场景：当需要从内容脚本中获取特定数据时，可以通过此函数实现
+ *
+ * @param {Function} callback - 回调函数，接收从内容脚本返回的响应数据
+ */
+function getResponse(callback) {
+    // 查询当前窗口的激活标签页
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        if (callback) callback(tabs.length ? tabs[0].id : null);
+        // 向查询到的第一个标签页发送消息，请求淘宝响应数据
+        chrome.tabs.sendMessage(tabs[0].id, { type: 'GET_TAOBAO_RESPONSE' }, function (response) {
+            // 如果回调函数存在，则将获取到的响应数据传递给回调函数处理
+            callback && callback(response);
+        });
     });
 }

@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Download image extension",
     "manifest_version": 3,
-    "author": "x",
+    "author": "XERA_2011",
     "icons": {
         "16": "icons/icon_16.png",
         "128": "icons/icon_128.png"
@@ -21,14 +21,19 @@
     "permissions": ["storage", "activeTab", "scripting"],
     "content_scripts": [
         {
-            "js": ["content.js"],
+            "js": ["utils/jquery-3.7.1.min.js", "content/taobao.js"],
             "matches": [
                 "https://*.1688.com/*",
                 "https://*.alibaba.com/*",
                 "https://*.taobao.com/*",
                 "https://*.tmall.com/*",
                 "https://detail.tmall.com/*",
-                "https://*.tmall.hk/*",
+                "https://*.tmall.hk/*"
+            ]
+        },
+        {
+            "js": ["content/index.js"],
+            "matches": [
                 "http://www.xiaohongshu.com/*",
                 "https://www.xiaohongshu.com/*",
                 "https://*.instagram.com/*"
@@ -37,15 +42,11 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["script/gm_api.js"],
-            "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*", "https://*.instagram.com/*"]
-        },
-        {
-            "resources": ["script/xiaohongshu.js"],
+            "resources": ["script/gm_api.js", "script/xiaohongshu.js"],
             "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*"]
         },
         {
-            "resources": ["utils/jquery-3.7.1.min.js", "script/instagram.js"],
+            "resources": ["script/gm_api.js", "utils/jquery-3.7.1.min.js", "script/instagram.js"],
             "matches": ["https://*.instagram.com/*"]
         }
     ]
