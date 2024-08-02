@@ -1,16 +1,18 @@
 let getImgBtn = $('#getImg');
 let tips = $('#tips');
 let videoUrl = "";
-let status = 0;
+let downloadStatus = 0;
 let zipName = "文件";
 let imgList = [];
 let percent = 0;
 
 getImgBtn.on('click', function (e) {
     getResponse((response) => {
+        if (imgList.length > 0) return;
         console.log('资源内容', response);
         if (response && (response.zhu.length > 0 || response.xiang.length > 0)) {
             getImgBtn.html('已获取数据 √');
+            getImgBtn.css({ 'color': '#ccc', 'cursor': 'no-drop' });
             $('#download').css('cursor', 'pointer');
             if (response.name !== "") {
                 zipName = response.name.replaceAll(" ", "").replaceAll("\n", "").replaceAll("/", "_")
@@ -46,9 +48,9 @@ getImgBtn.on('click', function (e) {
                 let currentSelect = $('#imgList').find(".activation").length;
                 tips.html(`当前选中 ${currentSelect}/${imgList.length}`);
             });
-            status = 0;
+            downloadStatus = 0;
         } else {
-            status = 0;
+            downloadStatus = 0;
             tips.html('暂不支持当前页 ×');
         }
     });
@@ -56,8 +58,8 @@ getImgBtn.on('click', function (e) {
 
 let downloadBtn = $('#download');
 downloadBtn.on('click', function () {
-    if (status === 0) {
-        status = 1;
+    if (downloadStatus === 0) {
+        downloadStatus = 1;
         var list = $("#imgList").find(".activation") || [];
         var imgUrls = []
         list.each(function () {
@@ -66,7 +68,7 @@ downloadBtn.on('click', function () {
             imgUrls.push({ src: img.attr('src'), name: span.text() });
         });
         if (imgUrls.length === 0) {
-            status = 0;
+            downloadStatus = 0;
             tips.html('未选择图片');
             return;
         }
@@ -75,7 +77,7 @@ downloadBtn.on('click', function () {
         try {
             saveToZip(zip, imgUrls, 0)
         } catch (e) {
-            status = 0;
+            downloadStatus = 0;
             console.error(e);
         }
     } else {
@@ -165,14 +167,14 @@ function saveToZip(zip, imgUrls, index) {
                     }
                     zip.generateAsync({ type: "blob" }).then(function (content) {
                         saveAs(content, zipName + ".zip");
-                        status = 0;
+                        downloadStatus = 0;
                         tips.html('打包完成');
                     });
                 });
             } else {
                 zip.generateAsync({ type: "blob" }).then(function (content) {
                     saveAs(content, zipName + ".zip");
-                    status = 0;
+                    downloadStatus = 0;
                     tips.html('打包完成');
                 });
             }
