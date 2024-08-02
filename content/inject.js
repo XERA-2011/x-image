@@ -1,4 +1,5 @@
 const _url = window.location.href;
+
 // 注入脚本
 const injectScript = (file, node) => {
     return new Promise((resolve, reject) => {
@@ -13,7 +14,7 @@ const injectScript = (file, node) => {
 };
 // 注入css
 const injectCSS = (file, node) => {
-    const th = document.querySelector(node);
+    const th = document.querySelector(node || 'head');
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
@@ -23,7 +24,7 @@ const injectCSS = (file, node) => {
 
 // 小红书
 if (_url.indexOf("xiaohongshu.com") > -1) {
-    console.log("x-image 注入xiaohongshu脚本");
+    console.log("x-image 注入XHS-Downloader脚本");
     Promise.all([
         injectScript('script/gm_api.js'),
     ]).then(() => {
@@ -35,13 +36,27 @@ if (_url.indexOf("xiaohongshu.com") > -1) {
 
 // instagram
 if (_url.indexOf("instagram.com") > -1) {
-    console.log("x-image 注入instagram脚本");
+    console.log("x-image 注入Instagram_Download_Button脚本");
     Promise.all([
         injectScript('script/gm_api.js'),
         injectScript('utils/jquery-3.7.1.min.js'),
     ]).then(() => {
-        return injectScript('script/instagram.js');
+        return injectScript('script/Instagram_Download_Button.js');
     }).catch(error => {
         console.error('脚本加载失败:', error);
     });
 }
+
+// // instagram
+// if (_url.indexOf("instagram.com") > -1) {
+//     console.log("x-image 注入ig-helper脚本");
+//     injectCSS('css/style.css');
+//     Promise.all([
+//         injectScript('script/gm_api.js'),
+//         injectScript('utils/jquery-3.7.1.min.js'),
+//     ]).then(() => {
+//         return injectScript('script/ig-helper.js');
+//     }).catch(error => {
+//         console.error('脚本加载失败:', error);
+//     });
+// }

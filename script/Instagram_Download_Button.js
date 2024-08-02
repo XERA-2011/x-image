@@ -225,8 +225,8 @@
         appendNode(node, newtabBtn);
 
         // add download button
-        let downloadBtn = createCustomBtn(svgDownloadBtn, iconColor, 'download-btn', '14px');
-        appendNode(node, downloadBtn);
+        // let downloadBtn = createCustomBtn(svgDownloadBtn, iconColor, 'download-btn', '14px');
+        // appendNode(node, downloadBtn);
 
         if (prefetchAndAttachLink) {
             onMouseInHandler({ currentTarget: newtabBtn });
@@ -743,19 +743,146 @@
                 .split('/')
                 .pop();
         }
-        fetch(url, {
-            headers: new Headers({
-                'User-Agent': window.navigator.userAgent,
-                Origin: location.origin,
-            }),
-            mode: 'cors',
-        })
-            .then(response => response.blob())
-            .then(blob => {
+        // fetch(url, {
+        //     headers: new Headers({
+        //         'User-Agent': window.navigator.userAgent,
+        //         Origin: location.origin,
+        //     }),
+        //     mode: 'cors',
+        // })
+        //     .then(response => response.blob())
+        //     .then(blob => {
+        //         const extension = blob.type.split('/').pop();
+        //         let blobUrl = window.URL.createObjectURL(blob);
+        //         forceDownload(blobUrl, filename, extension);
+        //     })
+        //     .catch(e => console.error(e));
+        getResources(url, (blob, status) => {
+            if (status) {
                 const extension = blob.type.split('/').pop();
                 let blobUrl = window.URL.createObjectURL(blob);
-                forceDownload(blobUrl, filename, extension);
-            })
-            .catch(e => console.error(e));
+                // forceDownload(blobUrl, filename, extension);
+                let highlightId = location.href.replace(/\/$/ig, '').split('/').at(-1);
+                let timestamp = Math.floor(new Date().getTime() / 1000);
+                let username = '测试名称';
+                saveFiles(url, username, "video", timestamp, 'mp4', highlightId);
+            }
+        })
     }
+    /**
+     * updateLoadingBar
+     * Update loading state
+     *
+     * @param  {Boolean}  isLoading - Check if loading state
+     * @return {void}
+     */
+    function updateLoadingBar(isLoading) {
+        if (isLoading) {
+            $('div[id^="mount"] > div > div > div:first').removeClass('x1s85apg');
+            $('div[id^="mount"] > div > div > div:first').css('z-index', '20000');
+        }
+        else {
+            $('div[id^="mount"] > div > div > div:first').addClass('x1s85apg');
+            $('div[id^="mount"] > div > div > div:first').css('z-index', '');
+        }
+    }
+    /**
+     * saveFiles
+     * Download the specified media URL to the computer
+     *
+     * @param  {String}  downloadLink
+     * @param  {String}  username
+     * @param  {String}  sourceType
+     * @param  {Integer}  timestamp
+     * @param  {String}  filetype
+     * @param  {String}  shortcode
+     * @return {void}
+     */
+    function saveFiles(downloadLink, username, sourceType, timestamp, filetype, shortcode) {
+        console.log('---', downloadLink, username, sourceType, timestamp, filetype, shortcode);
+        setTimeout(() => {
+            fetch(downloadLink).then(res => {
+                return res.blob().then(dwel => {
+                    createSaveFileElement(downloadLink, dwel, username, sourceType, timestamp, filetype, shortcode);
+                });
+            });
+        }, 50);
+    }
+
+    /**
+     * createSaveFileElement
+     * Download the specified media with link element
+     *
+     * @param  {String}  downloadLink
+     * @param  {Object}  object
+     * @param  {String}  username
+     * @param  {String}  sourceType
+     * @param  {Integer}  timestamp
+     * @param  {String}  filetype
+     * @param  {String}  shortcode
+     * @return {void}
+     */
+    function createSaveFileElement(downloadLink, object, username, sourceType, timestamp, filetype, shortcode) {
+        timestamp = parseInt(timestamp.toString().padEnd(13, '0'));
+
+        if (USER_SETTING.RENAME_PUBLISH_DATE) {
+            timestamp = parseInt(timestamp.toString().padEnd(13, '0'));
+        }
+
+        const date = new Date(timestamp);
+
+        const a = document.createElement("a");
+        const original_name = new URL(downloadLink).pathname.split('/').at(-1).split('.').slice(0, -1).join('.');
+        const year = date.getFullYear().toString();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hour = date.getHours().toString().padStart(2, '0');
+        const minute = date.getMinutes().toString().padStart(2, '0');
+        const second = date.getSeconds().toString().padStart(2, '0');
+
+        var filename = RENAME_FORMAT.toUpperCase();
+        var replacements = {
+            '%USERNAME%': username,
+            '%SOURCE_TYPE%': sourceType,
+            '%SHORTCODE%': (shortcode) ? shortcode : '',
+            '%YEAR%': year,
+            '%MONTH%': month,
+            '%DAY%': day,
+            '%HOUR%': hour,
+            '%MINUTE%': minute,
+            '%SECOND%': second,
+            '%ORIGINAL_NAME%': original_name
+        };
+
+        filename = filename.replace(/%\w+%/g, function (str) {
+            return replacements[str] || str;
+        });
+
+        const originally = username + '_' + original_name + '.' + filetype;
+
+        a.href = URL.createObjectURL(object);
+        a.setAttribute("download", (USER_SETTING.AUTO_RENAME) ? filename + '.' + filetype : originally);
+        a.click();
+        a.remove();
+    }
+    function getResources(url, callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", url, true);
+        xhr.responseType = "blob";
+        xhr.onload = function () {
+            if (this.status == 200 || this.status == 304) {
+                callback(this.response, true);
+            }
+        };
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status !== 200) {
+                    console.log('发生了错误：', xhr.status, xhr.statusText);
+                    callback("", false);
+                }
+            }
+        };
+        xhr.send();
+    }
+
 })();

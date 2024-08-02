@@ -42,7 +42,64 @@ function GM_addStyle(css) {
     document.head.append(style);
 }
 
+var TM_xmlhttpRequest = function (details) {
+    var forget = false;
+
+    var callit = function (fn, arg) {
+        var run = function () {
+            fn(arg);
+        };
+        if (fn && !forget) window.setTimeout(run, 1);
+    };
+
+    var xmlhttp2 = !!details.responseType;
+    if (/* TMwin.use.safeContext */ xmlhttp2) {
+        var load = function (r) {
+            callit(details["onload"], r);
+        };
+        var readystatechange = function (r) {
+            callit(details["onreadystatechange"], r);
+        };
+        var error = function (r) {
+            callit(details["onerror"], r);
+        }
+
+        chromeEmu.xmlHttpRequest(details, load, readystatechange, error);
+    } else {
+        var port = chromeEmu.extension.connect('xhr_' + TM_context_id);
+        port.postMessage({ method: "xhr", details: details, id: TM_context_id });
+
+        var plist = function (response) {
+            try {
+                if (response.success) {
+                    if (details["onload"]) {
+                        if (response.data.responseXML) response.data.responseXML = unescape(response.data.responseXML);
+                        callit(details["onload"], response.data);
+                    }
+                } else if (response.change) {
+                    if (details["onreadystatechange"]) {
+                        callit(details["onreadystatechange"], response.data);
+                    }
+                } else {
+                    if (details["onerror"]) {
+                        callit(details["onerror"], response.data);
+                    }
+                }
+            } catch (e) {
+                console.log("env: Error: TM_xmlhttpRequest - " + e.message + "\n" + JSON.stringify(details));
+            }
+        };
+
+        port.onMessage.addListener(plist);
+        var omsg = function (response) { console.log("env: onDisconnect! :)") };
+        if (V) port.onDisconnect.addListener(omsg);
+    }
+
+    return { abort: function () { forget = true; } };
+}
+
 function GM_xmlhttpRequest(details) {
+    // return TM_xmlhttpRequest(details);
     const { method = 'GET', url, headers = {}, data, onload, onerror } = details;
     fetch(url, {
         method,

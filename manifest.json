@@ -4,6 +4,7 @@
     "description": "Download image extension",
     "manifest_version": 3,
     "author": "XERA_2011",
+    "homepage_url": "https://github.com/XERA-2011/x-image",
     "icons": {
         "16": "icons/icon_16.png",
         "128": "icons/icon_128.png"
@@ -13,6 +14,7 @@
             "16": "icons/icon_16.png",
             "128": "icons/icon_128.png"
         },
+        "default_title": "下图插件",
         "default_popup": "popup.html"
     },
     "background": {
@@ -32,7 +34,7 @@
             ]
         },
         {
-            "js": ["content/index.js"],
+            "js": ["content/inject.js"],
             "matches": [
                 "http://www.xiaohongshu.com/*",
                 "https://www.xiaohongshu.com/*",
@@ -42,11 +44,16 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["script/gm_api.js", "script/xiaohongshu.js"],
+            "resources": ["script/gm_api.js", "script/XHS-Downloader.js"],
             "matches": ["http://www.xiaohongshu.com/*", "https://www.xiaohongshu.com/*"]
         },
         {
-            "resources": ["script/gm_api.js", "utils/jquery-3.7.1.min.js", "script/instagram.js"],
+            "resources": [
+                "css/style.css",
+                "script/gm_api.js",
+                "utils/jquery-3.7.1.min.js",
+                "script/Instagram_Download_Button.js"
+            ],
             "matches": ["https://*.instagram.com/*"]
         }
     ]
