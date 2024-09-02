@@ -293,7 +293,7 @@ let platform_taobao = async function (result) {
         result.xiang.push({ "src": imgUrl, "name": "详情图_" + (i + 1) });
     });
 
-    var skuEles = $("[class^=\"SkuContent--content--\"] img");
+    var skuEles = $('div[class*="valueItem"] img');
     skuEles.each(function (i) {
         var imgSrc = $(this).attr("src");
         imgSrc = processImageSrc(imgSrc);
